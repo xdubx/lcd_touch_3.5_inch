@@ -27,4 +27,4 @@ LCD_REST A4
 5V  5V
 GND GND
 
-Diplay: https://www.amazon.de/dp/B07KK4NV3V/ref=cm_sw_em_r_mt_dp_U_dQW5CbBSQV0BQ
+Display: https://www.amazon.de/dp/B07KK4NV3V/ref=cm_sw_em_r_mt_dp_U_dQW5CbBSQV0BQ
