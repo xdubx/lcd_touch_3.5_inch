@@ -3,7 +3,9 @@ Code written for a Arduino ATMega 2560
 
 Depens on the libs
 TouchScreen.h https://github.com/adafruit/Adafruit_TouchScreen
+
 LCDWIKI_GUI.h https://github.com/gitcnd/LCDWIKI_GUI/
+
 LCDWIKI_KBV.h http://www.lcdwiki.com/3.5inch_Arduino_Display-UNO
 
 game code from the website http://www.educ8s.tv
