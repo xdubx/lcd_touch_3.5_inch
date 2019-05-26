@@ -103,7 +103,6 @@ void loop()
     Serial.print("\tY = ");
     Serial.print(y);
     Serial.print("\n");
-    Serial.println(String(getCenterX() - 100) + " " + (getCenterX() + 100) + " " + (getCenterY() + 60) + " " + (getCenterY() + 120));
     if (x > getCenterX() - 100 && x < getCenterX() + 100 && y > getCenterY() + 60 && y < getCenterY() + 120 && buttonEnabled) // The user has pressed inside the red rectangle
     {
       buttonEnabled = false; //Disable button
@@ -114,7 +113,7 @@ void loop()
       pinMode(YP, OUTPUT);
 
       drawGameScreen();
-      //playGame();
+      playGame();
     }
     delay(10);
   }
@@ -192,7 +191,7 @@ void drawGameOverScreen()
 
   //Draw frame
   my_lcd.Set_Draw_color(WHITE);
-  my_lcd.Draw_Rectangle(0, 0, my_lcd.Get_Display_Width() - 1, my_lcd.Get_Display_Height() - 1);
+  my_lcd.Draw_Rectangle(0, 1, my_lcd.Get_Display_Width() - 1, my_lcd.Get_Display_Height() - 1);
 
   show_string(gameEndText, getCenterX() - (gameText.length() * 9), getCenterY() - 70, 4, WHITE, BLACK, 1);
 
@@ -207,7 +206,7 @@ void drawGameOverScreen()
 
   if (winner == 2)
   {
-    show_string(cpuText, getCenterX() - (gameText.length() * 5), getCenterY(), 3, RED, BLACK, 1);
+    show_string(cpuText, getCenterX() - (gameText.length() * 8), getCenterY(), 3, RED, BLACK, 1);
   }
 
   my_lcd.Set_Draw_color(RED);
@@ -256,17 +255,17 @@ void drawPlayerMove(int move)
 void drawCircle(int x, int y)
 {
   my_lcd.Set_Draw_color(BLUE);
-  my_lcd.Draw_Circle(x, y, 10);
+  my_lcd.Fill_Circle(x, y, 45);
   my_lcd.Set_Draw_color(BLACK);
-  my_lcd.Draw_Circle(x, y, 8)
+  my_lcd.Fill_Circle(x, y, 30);
 }
 
 void drawCircleCPU(int x, int y)
 {
   my_lcd.Set_Draw_color(RED);
-  my_lcd.Draw_Circle(x, y, 10);
+  my_lcd.Fill_Circle(x, y, 45);
   my_lcd.Set_Draw_color(BLACK);
-  my_lcd.Draw_Circle(x, y, 8);
+  my_lcd.Fill_Circle(x, y, 30);
 }
 
 void drawCpuMove(int move)
@@ -323,18 +322,20 @@ void playerMove()
       //rotate touch input if needed
       if (rotated)
       {
-        y = map(p.x, TS_MINX, TS_MAXX, 0, my_lcd.Get_Display_Height());
-        x = map(p.y, TS_MINY, TS_MAXY, my_lcd.Get_Display_Width(), 0);
+      y = map(p.x, TS_MINX, TS_MAXX, my_lcd.Get_Display_Height(), 0);
+      x = map(p.y, TS_MINY, TS_MAXY, my_lcd.Get_Display_Width(), 0);
       }
       else
       {
         y = map(p.y, TS_MINY, TS_MAXY, my_lcd.Get_Display_Height(), 0);
         x = map(p.x, TS_MINX, TS_MAXX, my_lcd.Get_Display_Width(), 0);
       }
+     Serial.println("\n-----");
       Serial.println(x);
       Serial.println(y);
+       Serial.println("\n-----");
 
-      if ((x < 115) && (y >= 150)) //6
+      if ((x < (my_lcd.Get_Display_Width() / 3)) && (y >= (my_lcd.Get_Display_Height() / 3) * 2 )) //6
       {
         if (board[6] == 0)
         {
@@ -346,7 +347,7 @@ void playerMove()
           Serial.println("Drawing player move");
         }
       }
-      else if ((p.x > 0 && p.x < (my_lcd.Get_Display_Width() / 3)) && (p.y < (my_lcd.Get_Display_Height() / 3) * 2 && p.y > (my_lcd.Get_Display_Height() / 3))) //3
+      else if ((x > 0 && x < (my_lcd.Get_Display_Width() / 3)) && (y < (my_lcd.Get_Display_Height() / 3) * 2 && y > (my_lcd.Get_Display_Height() / 3))) //3
       {
 
         if (board[3] == 0)
@@ -359,7 +360,7 @@ void playerMove()
           Serial.println("Drawing player move");
         }
       }
-      else if ((p.x < (my_lcd.Get_Display_Width() / 3)) && (p.y < (my_lcd.Get_Display_Height() / 3))) //0
+      else if ((x < (my_lcd.Get_Display_Width() / 3)) && (y < (my_lcd.Get_Display_Height() / 3))) //0
       {
         if (board[0] == 0)
         {
@@ -371,7 +372,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) && p.x <= (my_lcd.Get_Display_Width() / 3) * 2) && (p.y < (my_lcd.Get_Display_Height() / 3))) //1
+      else if ((x > (my_lcd.Get_Display_Width() / 3) && x <= ((my_lcd.Get_Display_Width() / 3) * 2)) && (y < (my_lcd.Get_Display_Height() / 3))) //1
       {
         if (board[1] == 0)
         {
@@ -383,7 +384,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) * 2) && (p.y < (my_lcd.Get_Display_Height() / 3))) //2
+      else if ((x > (my_lcd.Get_Display_Width() / 3) * 2) && (y < (my_lcd.Get_Display_Height() / 3))) //2
       {
         if (board[2] == 0)
         {
@@ -395,7 +396,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) && p.x <= (my_lcd.Get_Display_Width() / 3) * 2) && (p.y < (my_lcd.Get_Display_Height() / 3) * 2 && p.y > (my_lcd.Get_Display_Height() / 3))) //4
+      else if ((x > (my_lcd.Get_Display_Width() / 3) && x <= (my_lcd.Get_Display_Width() / 3) * 2) && (y < (my_lcd.Get_Display_Height() / 3) * 2 && y > (my_lcd.Get_Display_Height() / 3))) //4
       {
         if (board[4] == 0)
         {
@@ -407,7 +408,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) * 2) && (p.y < (my_lcd.Get_Display_Height() / 3) * 2 && p.y > (my_lcd.Get_Display_Height() / 3))) //5
+      else if ((x > (my_lcd.Get_Display_Width() / 3) * 2) && (y < (my_lcd.Get_Display_Height() / 3) * 2 && y > (my_lcd.Get_Display_Height() / 3))) //5
       {
         if (board[5] == 0)
         {
@@ -419,7 +420,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) && p.x <= (my_lcd.Get_Display_Width() / 3) * 2) && (p.y > 150)) //7
+      else if ((x > (my_lcd.Get_Display_Width() / 3) && x <= (my_lcd.Get_Display_Width() / 3) * 2) && (y > 150)) //7
       {
         if (board[7] == 0)
         {
@@ -431,7 +432,7 @@ void playerMove()
         }
       }
 
-      else if ((p.x > (my_lcd.Get_Display_Width() / 3) * 2) && (p.y > (my_lcd.Get_Display_Height() / 3) * 2)) //8
+      else if ((x > (my_lcd.Get_Display_Width() / 3) * 2) && (y > (my_lcd.Get_Display_Height() / 3) * 2)) //8
       {
         if (board[8] == 0)
         {
@@ -453,13 +454,13 @@ void playGame()
     if (moves % 2 == 1)
     {
       arduinoMove();
-      printBoard();
+      //printBoard();
       checkWinner();
     }
     else
     {
       playerMove();
-      printBoard();
+      //printBoard();
       checkWinner();
     }
     moves++;
